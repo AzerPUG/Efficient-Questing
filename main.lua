@@ -2,13 +2,12 @@ local GlobalAddonName, AGU = ...
 
 local initialConfig = AGU.initialConfig
 
-local AZPGUQuestEfficiencyVersion = 0.1
+local AZPGUQuestEfficiencyVersion = 2
 local dash = " - "
 local name = "GameUtility" .. dash .. "QuestEfficiency"
 local nameFull = ("AzerPUG " .. name)
 local promo = (nameFull .. dash ..  AZPGUQuestEfficiencyVersion)
 
-local addonLoaded = false
 local addonMain = LibStub("AceAddon-3.0"):NewAddon("GameUtility-QuestEfficiency", "AceConsole-3.0")
 
 function AZP.GU.VersionControl:QuestEfficiency()
