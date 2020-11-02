@@ -2,7 +2,7 @@ local GlobalAddonName, AGU = ...
 
 local initialConfig = AGU.initialConfig
 
-local AZPGUQuestEfficiencyVersion = 3
+local AZPGUQuestEfficiencyVersion = 4
 local dash = " - "
 local name = "GameUtility" .. dash .. "QuestEfficiency"
 local nameFull = ("AzerPUG " .. name)
