@@ -2,7 +2,7 @@ local GlobalAddonName, AGU = ...
 
 local initialConfig = AGU.initialConfig
 
-local AZPGUQuestEfficiencyVersion = 6
+local AZPGUQuestEfficiencyVersion = 7
 local dash = " - "
 local name = "GameUtility" .. dash .. "QuestEfficiency"
 local nameFull = ("AzerPUG " .. name)
@@ -16,6 +16,7 @@ end
 
 function AZP.GU.OnLoad:QuestEfficiency(self)
     addonMain:initializeConfig()
+    addonMain:ChangeOptionsText()
 
     local OptionsHeader = QuestEfficiencySubPanel:CreateFontString("OptionsHeader", "ARTWORK", "GameFontNormalHuge")
     OptionsHeader:SetText(promo)
@@ -30,7 +31,7 @@ function AZP.GU.OnLoad:QuestEfficiency(self)
     end)
 
     local defaultCompleteButtonBehaviour = QuestFrameCompleteQuestButton:GetScript("OnShow")
-    QuestFrameCompleteQuestButton:SetScript("OnShow", function(...) 
+    QuestFrameCompleteQuestButton:SetScript("OnShow", function(...)
         defaultCompleteButtonBehaviour(...)
         AZPAddonHelper:DelayedExecution(0.5, function() addonMain:SelectMostExpensive() end)
     end)
@@ -69,4 +70,26 @@ function addonMain:initializeConfig()
 end
 
 function AZP.GU.OnEvent:QuestEfficiency(self, event, ...)
+end
+
+function addonMain:ChangeOptionsText()
+    QuestEfficiencySubPanelPHTitle:Hide()
+    QuestEfficiencySubPanelPHText:Hide()
+    QuestEfficiencySubPanelPHTitle:SetParent(nil)
+    QuestEfficiencySubPanelPHText:SetParent(nil)
+
+    local QuestEfficiencySubPanelHeader = QuestEfficiencySubPanel:CreateFontString("QuestEfficiencySubPanelHeader", "ARTWORK", "GameFontNormalHuge")
+    QuestEfficiencySubPanelHeader:SetText(promo)
+    QuestEfficiencySubPanelHeader:SetWidth(QuestEfficiencySubPanel:GetWidth())
+    QuestEfficiencySubPanelHeader:SetHeight(QuestEfficiencySubPanel:GetHeight())
+    QuestEfficiencySubPanelHeader:SetPoint("TOP", 0, -10)
+
+    local QuestEfficiencySubPanelText = QuestEfficiencySubPanel:CreateFontString("QuestEfficiencySubPanelText", "ARTWORK", "GameFontNormalHuge")
+    QuestEfficiencySubPanelText:SetWidth(QuestEfficiencySubPanel:GetWidth())
+    QuestEfficiencySubPanelText:SetHeight(QuestEfficiencySubPanel:GetHeight())
+    QuestEfficiencySubPanelText:SetPoint("TOPLEFT", 0, -50)
+    QuestEfficiencySubPanelText:SetText(
+        "AzerPUG-GameUtility-QuestEfficiency does not have options yet.\n" ..
+        "For feature requests visit our Discord Server!"
+    )
 end
