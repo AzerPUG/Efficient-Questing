@@ -2,7 +2,7 @@ local GlobalAddonName, AGU = ...
 
 local initialConfig = AGU.initialConfig
 
-local AZPGUQuestEfficiencyVersion = 7
+local AZPGUQuestEfficiencyVersion = 8
 local dash = " - "
 local name = "GameUtility" .. dash .. "QuestEfficiency"
 local nameFull = ("AzerPUG " .. name)
@@ -69,7 +69,7 @@ function addonMain:initializeConfig()
     end
 end
 
-function AZP.GU.OnEvent:QuestEfficiency(self, event, ...)
+function AZP.GU.OnEvent:QuestEfficiency(event, ...)
 end
 
 function addonMain:ChangeOptionsText()
