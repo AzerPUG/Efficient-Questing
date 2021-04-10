@@ -1,8 +1,14 @@
-local GlobalAddonName, AGU = ...
+if AZP == nil then AZP = {} end
+if AZP.VersionControl == nil then AZP.VersionControl = {} end
+if AZP.OnLoad == nil then AZP.OnLoad = {} end
+if AZP.OnEvent == nil then AZP.OnEvent = {} end
+if AZP.OnEvent == nil then AZP.OnEvent = {} end
+
+AZP.VersionControl.EfficientQuesting = 9
+AZP.EfficientQuesting = {}
 
 local initialConfig = AGU.initialConfig
 
-local AZPGUQuestEfficiencyVersion = 9
 local dash = " - "
 local name = "GameUtility" .. dash .. "QuestEfficiency"
 local nameFull = ("AzerPUG " .. name)
