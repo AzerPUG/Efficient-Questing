@@ -10,19 +10,17 @@ AZP.EfficientQuesting = {}
 local initialConfig = AGU.initialConfig
 
 local dash = " - "
-local name = "GameUtility" .. dash .. "QuestEfficiency"
+local name = "Efficient Questing"
 local nameFull = ("AzerPUG " .. name)
 local promo = (nameFull .. dash ..  AZPGUQuestEfficiencyVersion)
 
-local addonMain = LibStub("AceAddon-3.0"):NewAddon("GameUtility-QuestEfficiency", "AceConsole-3.0")
-
-function AZP.GU.VersionControl:QuestEfficiency()
+function AZP.GU.VersionControl:EfficientQuesting()
     return AZPGUQuestEfficiencyVersion
 end
 
-function AZP.GU.OnLoad:QuestEfficiency(self)
-    addonMain:initializeConfig()
-    addonMain:ChangeOptionsText()
+function AZP.GU.OnLoad:EfficientQuesting(self)
+    AZP.EfficientQuesting:initializeConfig()
+    AZP.EfficientQuesting:ChangeOptionsText()
 
     local OptionsHeader = QuestEfficiencySubPanel:CreateFontString("OptionsHeader", "ARTWORK", "GameFontNormalHuge")
     OptionsHeader:SetText(promo)
@@ -33,17 +31,17 @@ function AZP.GU.OnLoad:QuestEfficiency(self)
     local defaultBehaviour = QuestFrame:GetScript("OnShow")
     QuestFrame:SetScript("OnShow", function() 
         defaultBehaviour()
-        addonMain:SelectMostExpensive()
+        AZP.EfficientQuesting:SelectMostExpensive()
     end)
 
     local defaultCompleteButtonBehaviour = QuestFrameCompleteQuestButton:GetScript("OnShow")
     QuestFrameCompleteQuestButton:SetScript("OnShow", function(...)
         defaultCompleteButtonBehaviour(...)
-        AZPAddonHelper:DelayedExecution(0.5, function() addonMain:SelectMostExpensive() end)
+        AZPAddonHelper:DelayedExecution(0.5, function() AZP.EfficientQuesting:SelectMostExpensive() end)
     end)
 end
 
-function addonMain:SelectMostExpensive()
+function AZP.EfficientQuesting:SelectMostExpensive()
     local numRewardChoices = GetNumQuestChoices()
     if numRewardChoices > 1 then
         local mostExpensiveChoice = 1
@@ -69,16 +67,16 @@ function addonMain:SelectMostExpensive()
     end
 end
 
-function addonMain:initializeConfig()
+function AZP.EfficientQuesting:initializeConfig()
     if AGUCheckedData == nil then
         AGUCheckedData = initialConfig
     end
 end
 
-function AZP.GU.OnEvent:QuestEfficiency(event, ...)
+function AZP.OnEvent:EfficientQuesting(event, ...)
 end
 
-function addonMain:ChangeOptionsText()
+function AZP.EfficientQuesting:ChangeOptionsText()
     QuestEfficiencySubPanelPHTitle:Hide()
     QuestEfficiencySubPanelPHText:Hide()
     QuestEfficiencySubPanelPHTitle:SetParent(nil)
@@ -95,7 +93,7 @@ function addonMain:ChangeOptionsText()
     QuestEfficiencySubPanelText:SetHeight(QuestEfficiencySubPanel:GetHeight())
     QuestEfficiencySubPanelText:SetPoint("TOPLEFT", 0, -50)
     QuestEfficiencySubPanelText:SetText(
-        "AzerPUG-GameUtility-QuestEfficiency does not have options yet.\n" ..
+        "AzerPUG's Efficient Questing does not have options yet.\n" ..
         "For feature requests visit our Discord Server!"
     )
 end
