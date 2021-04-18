@@ -7,12 +7,10 @@ if AZP.OnEvent == nil then AZP.OnEvent = {} end
 AZP.VersionControl.EfficientQuesting = 9
 AZP.EfficientQuesting = {}
 
-local initialConfig = AGU.initialConfig
-
 local dash = " - "
 local name = "Efficient Questing"
 local nameFull = ("AzerPUG " .. name)
-local promo = (nameFull .. dash ..  AZPGUQuestEfficiencyVersion)
+local promo = (nameFull .. dash ..  AZP.VersionControl.EfficientQuesting)
 
 function AZP.GU.VersionControl:EfficientQuesting()
     return AZPGUQuestEfficiencyVersion
