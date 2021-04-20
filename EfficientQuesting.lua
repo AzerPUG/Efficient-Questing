@@ -7,36 +7,99 @@ if AZP.OnEvent == nil then AZP.OnEvent = {} end
 AZP.VersionControl.EfficientQuesting = 9
 AZP.EfficientQuesting = {}
 
-local dash = " - "
-local name = "Efficient Questing"
-local nameFull = ("AzerPUG " .. name)
-local promo = (nameFull .. dash ..  AZP.VersionControl.EfficientQuesting)
+local EventFrame, UpdateFrame
+local HaveShowedUpdateNotification = false
+local AZPEQSelfOptionPanel = nil
+local optionHeader = "|cFF00FFFFEfficient Questing|r"
 
-function AZP.GU.VersionControl:EfficientQuesting()
-    return AZPGUQuestEfficiencyVersion
-end
-
-function AZP.GU.OnLoad:EfficientQuesting(self)
-    AZP.EfficientQuesting:initializeConfig()
-    AZP.EfficientQuesting:ChangeOptionsText()
-
-    local OptionsHeader = QuestEfficiencySubPanel:CreateFontString("OptionsHeader", "ARTWORK", "GameFontNormalHuge")
-    OptionsHeader:SetText(promo)
-    OptionsHeader:SetWidth(QuestEfficiencySubPanel:GetWidth())
-    OptionsHeader:SetHeight(QuestEfficiencySubPanel:GetHeight())
-    OptionsHeader:SetPoint("TOP", 0, -10)
-
-    local defaultBehaviour = QuestFrame:GetScript("OnShow")
-    QuestFrame:SetScript("OnShow", function() 
-        defaultBehaviour()
-        AZP.EfficientQuesting:SelectMostExpensive()
-    end)
-
+function AZP.EfficientQuesting:OnLoadBoth()
     local defaultCompleteButtonBehaviour = QuestFrameCompleteQuestButton:GetScript("OnShow")
     QuestFrameCompleteQuestButton:SetScript("OnShow", function(...)
         defaultCompleteButtonBehaviour(...)
-        AZPAddonHelper:DelayedExecution(0.5, function() AZP.EfficientQuesting:SelectMostExpensive() end)
+        AZP.EfficientQuesting:DelayedExecution(0.5, function() AZP.EfficientQuesting:SelectMostExpensive() end)
     end)
+end
+
+function AZP.EfficientQuesting:OnLoadCore()
+    AZP.OptionsPanels:Generic("Efficient Questing", optionHeader, function (frame)
+        AZP.EfficientQuesting:FillOptionsPanel(frame)
+    end)
+end
+
+function AZP.EfficientQuesting:OnLoadSelf()
+    C_ChatInfo.RegisterAddonMessagePrefix("AZPVERSIONS")
+    EventFrame = CreateFrame("Frame")
+    EventFrame:SetScript("OnEvent", AZP.OnEvent.EfficientQuesting)
+    EventFrame:RegisterEvent("CHAT_MSG_ADDON")
+
+    UpdateFrame = CreateFrame("Frame", nil, UIParent, "BackdropTemplate")
+    UpdateFrame:SetPoint("CENTER", 0, 250)
+    UpdateFrame:SetSize(400, 200)
+    UpdateFrame:SetBackdrop({
+        bgFile = "Interface/Tooltips/UI-Tooltip-Background",
+        edgeFile = "Interface/Tooltips/UI-Tooltip-Border",
+        edgeSize = 12,
+        insets = { left = 1, right = 1, top = 1, bottom = 1 },
+    })
+    UpdateFrame:SetBackdropColor(0.25, 0.25, 0.25, 0.80)
+    UpdateFrame.header = UpdateFrame:CreateFontString("UpdateFrame", "ARTWORK", "GameFontNormalHuge")
+    UpdateFrame.header:SetPoint("TOP", 0, -10)
+    UpdateFrame.header:SetText("|cFFFF0000AzerPUG's Efficient Questing is out of date!|r")
+
+    UpdateFrame.text = UpdateFrame:CreateFontString("UpdateFrame", "ARTWORK", "GameFontNormalLarge")
+    UpdateFrame.text:SetPoint("TOP", 0, -40)
+    UpdateFrame.text:SetText("Error!")
+
+    UpdateFrame:Hide()
+
+    local UpdateFrameCloseButton = CreateFrame("Button", nil, UpdateFrame, "UIPanelCloseButton")
+    UpdateFrameCloseButton:SetWidth(25)
+    UpdateFrameCloseButton:SetHeight(25)
+    UpdateFrameCloseButton:SetPoint("TOPRIGHT", UpdateFrame, "TOPRIGHT", 2, 2)
+    UpdateFrameCloseButton:SetScript("OnClick", function() UpdateFrame:Hide() end )
+
+    AZPEQSelfOptionPanel = CreateFrame("FRAME", nil)
+    AZPEQSelfOptionPanel.name = optionHeader
+    InterfaceOptions_AddCategory(AZPEQSelfOptionPanel)
+    AZPEQSelfOptionPanel.header = AZPEQSelfOptionPanel:CreateFontString(nil, "ARTWORK", "GameFontNormalHuge")
+    AZPEQSelfOptionPanel.header:SetPoint("TOP", 0, -10)
+    AZPEQSelfOptionPanel.header:SetText(optionHeader)
+
+    AZPEQSelfOptionPanel.footer = AZPEQSelfOptionPanel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+    AZPEQSelfOptionPanel.footer:SetPoint("TOP", 0, -300)
+    AZPEQSelfOptionPanel.footer:SetText(
+        "|cFF00FFFFAzerPUG Links:\n" ..
+        "Website: www.azerpug.com\n" ..
+        "Discord: www.azerpug.com/discord\n" ..
+        "Twitch: www.twitch.tv/azerpug\n|r"
+    )
+    AZP.EfficientQuesting.FillOptionsPanel(AZPEQSelfOptionPanel)
+
+    AZP.EfficientQuesting:initializeConfig()
+
+    local defaultBehaviour = QuestFrame:GetScript("OnShow")
+    QuestFrame:SetScript("OnShow", function()
+        defaultBehaviour()
+        AZP.EfficientQuesting:SelectMostExpensive()
+    end)
+end
+
+function AZP.EfficientQuesting:FillOptionsPanel(frameToFill)
+end
+
+function AZP.EfficientQuesting:DelayedExecution(delayTime, delayedFunction)
+	local frame = CreateFrame("Frame")
+	frame.start_time = GetServerTime()
+	frame:SetScript("OnUpdate",
+		function(self)
+			if GetServerTime() - self.start_time > delayTime then
+				self:SetScript("OnUpdate", nil)
+				delayedFunction()
+				self:Hide()
+			end
+		end
+	)
+	frame:Show()
 end
 
 function AZP.EfficientQuesting:SelectMostExpensive()
@@ -51,7 +114,7 @@ function AZP.EfficientQuesting:SelectMostExpensive()
                 mostExpensiveValue = sellPrice
             end
         end
-        
+
         if mostExpensiveChoice == 1 then
             QuestInfoRewardsFrameQuestInfoItem1:Click()
         elseif mostExpensiveChoice == 2 then
@@ -61,37 +124,62 @@ function AZP.EfficientQuesting:SelectMostExpensive()
         elseif mostExpensiveChoice == 4 then
             QuestInfoRewardsFrameQuestInfoItem4:Click()
         end
-            
     end
 end
 
-function AZP.EfficientQuesting:initializeConfig()
-    if AGUCheckedData == nil then
-        AGUCheckedData = initialConfig
+function AZP.EfficientQuesting:ShareVersion()    -- Change DelayedExecution to native WoW Function.
+    local versionString = string.format("|EQ:%d|", AZP.VersionControl.EfficientQuesting)
+    AZP.EfficientQuesting:DelayedExecution(10, function() 
+        if IsInGroup() then
+            if IsInRaid() then
+                C_ChatInfo.SendAddonMessage("AZPVERSIONS", versionString ,"RAID", 1)
+            else
+                C_ChatInfo.SendAddonMessage("AZPVERSIONS", versionString ,"PARTY", 1)
+            end
+        end
+        if IsInGuild() then
+            C_ChatInfo.SendAddonMessage("AZPVERSIONS", versionString ,"GUILD", 1)
+        end
+    end)
+end
+
+function AZP.EfficientQuesting:ReceiveVersion(version)
+    if version > AZP.VersionControl.EfficientQuesting then
+        if (not HaveShowedUpdateNotification) then
+            HaveShowedUpdateNotification = true
+            UpdateFrame:Show()
+            UpdateFrame.text:SetText(
+                "Please download the new version through the CurseForge app.\n" ..
+                "Or use the CurseForge website to download it manually!\n\n" .. 
+                "Newer Version: v" .. version .. "\n" .. 
+                "Your version: v" .. AZP.VersionControl.EfficientQuesting
+            )
+        end
     end
 end
 
-function AZP.OnEvent:EfficientQuesting(event, ...)
+function AZP.EfficientQuesting:GetSpecificAddonVersion(versionString, addonWanted)
+    local pattern = "|([A-Z]+):([0-9]+)|"
+    local index = 1
+    while index < #versionString do
+        local _, endPos = string.find(versionString, pattern, index)
+        local addon, version = string.match(versionString, pattern, index)
+        index = endPos + 1
+        if addon == addonWanted then
+            return tonumber(version)
+        end
+    end
 end
 
-function AZP.EfficientQuesting:ChangeOptionsText()
-    QuestEfficiencySubPanelPHTitle:Hide()
-    QuestEfficiencySubPanelPHText:Hide()
-    QuestEfficiencySubPanelPHTitle:SetParent(nil)
-    QuestEfficiencySubPanelPHText:SetParent(nil)
+function AZP.OnEvent:EfficientQuesting(self, event, ...)
+    if event == "CHAT_MSG_ADDON" then
+        local prefix, payload, _, sender = ...
+        if prefix == "AZPVERSIONS" then
+            AZP.EfficientQuesting:ReceiveVersion(AZP.EfficientQuesting:GetSpecificAddonVersion(payload, "EQ"))
+        end
+    end
+end
 
-    local QuestEfficiencySubPanelHeader = QuestEfficiencySubPanel:CreateFontString("QuestEfficiencySubPanelHeader", "ARTWORK", "GameFontNormalHuge")
-    QuestEfficiencySubPanelHeader:SetText(promo)
-    QuestEfficiencySubPanelHeader:SetWidth(QuestEfficiencySubPanel:GetWidth())
-    QuestEfficiencySubPanelHeader:SetHeight(QuestEfficiencySubPanel:GetHeight())
-    QuestEfficiencySubPanelHeader:SetPoint("TOP", 0, -10)
-
-    local QuestEfficiencySubPanelText = QuestEfficiencySubPanel:CreateFontString("QuestEfficiencySubPanelText", "ARTWORK", "GameFontNormalHuge")
-    QuestEfficiencySubPanelText:SetWidth(QuestEfficiencySubPanel:GetWidth())
-    QuestEfficiencySubPanelText:SetHeight(QuestEfficiencySubPanel:GetHeight())
-    QuestEfficiencySubPanelText:SetPoint("TOPLEFT", 0, -50)
-    QuestEfficiencySubPanelText:SetText(
-        "AzerPUG's Efficient Questing does not have options yet.\n" ..
-        "For feature requests visit our Discord Server!"
-    )
+if not IsAddOnLoaded("AzerPUG's Core") then
+    AZP.EfficientQuesting:OnLoadSelf()
 end
