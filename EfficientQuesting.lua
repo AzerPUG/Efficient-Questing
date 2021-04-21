@@ -183,3 +183,11 @@ end
 if not IsAddOnLoaded("AzerPUG's Core") then
     AZP.EfficientQuesting:OnLoadSelf()
 end
+
+AZP.SlashCommands["EQ"] = function()
+    if EfficientQuestingSelfFrame ~= nil then EfficientQuestingSelfFrame:Show() end
+end
+
+AZP.SlashCommands["eq"] = AZP.SlashCommands["EQ"]
+AZP.SlashCommands["quest"] = AZP.SlashCommands["EQ"]
+AZP.SlashCommands["efficient questing"] = AZP.SlashCommands["EQ"]
