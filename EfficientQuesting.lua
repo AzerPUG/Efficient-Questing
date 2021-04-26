@@ -180,7 +180,7 @@ function AZP.OnEvent:EfficientQuesting(self, event, ...)
     end
 end
 
-if not IsAddOnLoaded("AzerPUG's Core") then
+if not IsAddOnLoaded("AzerPUGsCore") then
     AZP.EfficientQuesting:OnLoadSelf()
 end
 
