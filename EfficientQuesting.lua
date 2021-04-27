@@ -5,9 +5,9 @@ if AZP.OnLoad == nil then AZP.OnLoad = {} end
 AZP.VersionControl["Efficient Questing"] = 9
 AZP.EfficientQuesting = {}
 
-local EventFrame, UpdateFrame
-local HaveShowedUpdateNotification = false
 local AZPEQSelfOptionPanel = nil
+local EventFrame, UpdateFrame = nil, nil
+local HaveShowedUpdateNotification = false
 local optionHeader = "|cFF00FFFFEfficient Questing|r"
 
 function AZP.EfficientQuesting:OnLoadBoth()
@@ -74,8 +74,6 @@ function AZP.EfficientQuesting:OnLoadSelf()
         "Twitch: www.twitch.tv/azerpug\n|r"
     )
     AZP.EfficientQuesting.FillOptionsPanel(AZPEQSelfOptionPanel)
-
-    AZP.EfficientQuesting:initializeConfig()
 
     local defaultBehaviour = QuestFrame:GetScript("OnShow")
     QuestFrame:SetScript("OnShow", function()
