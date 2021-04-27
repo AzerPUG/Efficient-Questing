@@ -2,7 +2,7 @@ if AZP == nil then AZP = {} end
 if AZP.VersionControl == nil then AZP.VersionControl = {} end
 if AZP.OnLoad == nil then AZP.OnLoad = {} end
 
-AZP.VersionControl["EfficientQuesting"] = 9
+AZP.VersionControl["Efficient Questing"] = 9
 AZP.EfficientQuesting = {}
 
 local EventFrame, UpdateFrame
@@ -128,7 +128,7 @@ function AZP.EfficientQuesting:SelectMostExpensive()
 end
 
 function AZP.EfficientQuesting:ShareVersion()    -- Change DelayedExecution to native WoW Function.
-    local versionString = string.format("|EQ:%d|", AZP.VersionControl["EfficientQuesting"])
+    local versionString = string.format("|EQ:%d|", AZP.VersionControl["Efficient Questing"])
     AZP.EfficientQuesting:DelayedExecution(10, function() 
         if IsInGroup() then
             if IsInRaid() then
@@ -152,7 +152,7 @@ function AZP.EfficientQuesting:ReceiveVersion(version)
                 "Please download the new version through the CurseForge app.\n" ..
                 "Or use the CurseForge website to download it manually!\n\n" .. 
                 "Newer Version: v" .. version .. "\n" .. 
-                "Your version: v" .. AZP.VersionControl["EfficientQuesting"]
+                "Your version: v" .. AZP.VersionControl["Efficient Questing"]
             )
         end
     end
