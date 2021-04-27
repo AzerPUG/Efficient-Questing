@@ -1,8 +1,6 @@
 if AZP == nil then AZP = {} end
 if AZP.VersionControl == nil then AZP.VersionControl = {} end
 if AZP.OnLoad == nil then AZP.OnLoad = {} end
-if AZP.OnEvent == nil then AZP.OnEvent = {} end
-if AZP.OnEvent == nil then AZP.OnEvent = {} end
 
 AZP.VersionControl.EfficientQuesting = 9
 AZP.EfficientQuesting = {}
@@ -21,6 +19,7 @@ function AZP.EfficientQuesting:OnLoadBoth()
 end
 
 function AZP.EfficientQuesting:OnLoadCore()
+    AZP.OptionsPanels:RemovePanel("Efficient Questing")
     AZP.OptionsPanels:Generic("Efficient Questing", optionHeader, function (frame)
         AZP.EfficientQuesting:FillOptionsPanel(frame)
     end)
@@ -29,8 +28,9 @@ end
 function AZP.EfficientQuesting:OnLoadSelf()
     C_ChatInfo.RegisterAddonMessagePrefix("AZPVERSIONS")
     EventFrame = CreateFrame("Frame")
-    EventFrame:SetScript("OnEvent", AZP.OnEvent.EfficientQuesting)
+    EventFrame:SetScript("OnEvent", function(...) AZP.EfficientQuesting:OnEvent(...) end)
     EventFrame:RegisterEvent("CHAT_MSG_ADDON")
+    EventFrame:RegisterEvent("GROUP_ROSTER_UPDATE")
 
     UpdateFrame = CreateFrame("Frame", nil, UIParent, "BackdropTemplate")
     UpdateFrame:SetPoint("CENTER", 0, 250)
@@ -171,12 +171,14 @@ function AZP.EfficientQuesting:GetSpecificAddonVersion(versionString, addonWante
     end
 end
 
-function AZP.OnEvent:EfficientQuesting(self, event, ...)
+function AZP.EfficientQuesting:OnEvent(self, event, ...)
     if event == "CHAT_MSG_ADDON" then
         local prefix, payload, _, sender = ...
         if prefix == "AZPVERSIONS" then
             AZP.EfficientQuesting:ReceiveVersion(AZP.EfficientQuesting:GetSpecificAddonVersion(payload, "EQ"))
         end
+    elseif event == "GROUP_ROSTER_UPDATE" then
+        AZP.EfficientQuesting:ShareVersion()
     end
 end
 
