@@ -16,7 +16,7 @@
 AzerPUG's Efficient Questing makes sure that you do not waste time on reading boring quest text by simply skipping them. It also already selects the quest reward that is the most valuable, may you not have an upgrade as a reward.
 
 # Bugs, Errors, Glitches and Requests.
-If you find any of the above, please do not hessitate to create a GitHub Issue here: https://github.com/AzerPUG/Efficient-Questing/issues  
+If you find any of the above, please do not hesitate to create a GitHub Issue here: https://github.com/AzerPUG/Efficient-Questing/issues  
 Or you can join our Discord and let us know in the AzerTech channel: http://www.azerpug.com/discord  
 Please note that our Discord Verification level prevents new people from talking/commenting/ranking in the first 10 minutes!
 
