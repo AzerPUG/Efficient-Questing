@@ -142,7 +142,7 @@ function AZP.EfficientQuesting:ShareVersion()    -- Change DelayedExecution to n
 end
 
 function AZP.EfficientQuesting:ReceiveVersion(version)
-    if version > AZP.VersionControl["EfficientQuesting"] then
+    if version > AZP.VersionControl["Efficient Questing"] then
         if (not HaveShowedUpdateNotification) then
             HaveShowedUpdateNotification = true
             UpdateFrame:Show()
@@ -173,7 +173,10 @@ function AZP.EfficientQuesting:OnEvent(self, event, ...)
     if event == "CHAT_MSG_ADDON" then
         local prefix, payload, _, sender = ...
         if prefix == "AZPVERSIONS" then
-            AZP.EfficientQuesting:ReceiveVersion(AZP.EfficientQuesting:GetSpecificAddonVersion(payload, "EQ"))
+            local version = AZP.EfficientQuesting:GetSpecificAddonVersion(payload, "EQ")
+            if version ~= nil then
+                AZP.EfficientQuesting:ReceiveVersion(version)
+            end
         end
     elseif event == "GROUP_ROSTER_UPDATE" then
         AZP.EfficientQuesting:ShareVersion()
