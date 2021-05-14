@@ -2,7 +2,7 @@ if AZP == nil then AZP = {} end
 if AZP.VersionControl == nil then AZP.VersionControl = {} end
 if AZP.OnLoad == nil then AZP.OnLoad = {} end
 
-AZP.VersionControl["Efficient Questing"] = 10
+AZP.VersionControl["Efficient Questing"] = 11
 AZP.EfficientQuesting = {}
 
 local AZPEQSelfOptionPanel = nil
