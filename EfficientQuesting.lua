@@ -3,7 +3,8 @@ if AZP.VersionControl == nil then AZP.VersionControl = {} end
 if AZP.OnLoad == nil then AZP.OnLoad = {} end
 
 AZP.VersionControl["Efficient Questing"] = 11
-AZP.EfficientQuesting = {}
+if AZP.EfficientQuesting == nil then AZP.EfficientQuesting = {} end
+if AZP.EfficientQuesting.Events == nil then AZP.EfficientQuesting.Events = {} end
 
 local AZPEQSelfOptionPanel = nil
 local EventFrame, UpdateFrame = nil, nil
