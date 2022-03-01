@@ -2,7 +2,7 @@ if AZP == nil then AZP = {} end
 if AZP.VersionControl == nil then AZP.VersionControl = {} end
 if AZP.OnLoad == nil then AZP.OnLoad = {} end
 
-AZP.VersionControl["Efficient Questing"] = 14
+AZP.VersionControl["Efficient Questing"] = 15
 if AZP.EfficientQuesting == nil then AZP.EfficientQuesting = {} end
 if AZP.EfficientQuesting.Events == nil then AZP.EfficientQuesting.Events = {} end
 
